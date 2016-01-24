@@ -1,0 +1,12 @@
+Source: ros-indigo-ubiquity-launches
+Section: misc
+Priority: extra
+Maintainer: Wayne Gramlich <wayne@gramlich.net>
+Build-Depends: debhelper (>= 9.0.0), ros-indigo-catkin
+Homepage: 
+Standards-Version: 3.9.2
+
+Package: ros-indigo-ubiquity-launches
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, 
+Description: Robot Configurations
