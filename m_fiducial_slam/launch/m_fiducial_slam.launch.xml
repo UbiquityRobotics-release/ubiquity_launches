@@ -1,0 +1,69 @@
+<launch>
+  <!--Summary: Start Fiduical SLAM (Simultaneous Localication And Mapping) -->
+  <!--Overview: The launch file for this directory fires off the fiducial
+  slam subsystem.  This causes the `move_base` node to be
+  loaded so that local cost maps can be generated.
+  This launch file requires a `robot_base` argument to specify
+  which robot base is being used (e.g `loki`, `magni`, etc.) -->
+
+  <!-- Required arguments: -->
+  <arg name="robot_base" />
+    <!--robot_base: The robot base (e.g. "magni", "loki", etc.) to use. -->
+
+  <!-- Optional arguments: -->
+  <arg name="mapping_mode" default="false" />
+    <!--mapping_mode: Set to `true` to force mapping and `false` to disable
+        mapping. -->
+
+  <!-- Convenience arguments: -->
+  <arg name="root" value="$(find ubiquity_launches)" />
+  <arg name="jst" value="joystick_teleop" />
+  <arg name="cam" value="raspicam" />
+  <arg name="ms"  value="map_server" />
+  <arg name="mb"  value="move_base" />
+  <arg name="fd"  value="fiducial_detect" />
+  <arg name="fs"  value="fiducial_slam" />
+
+  <!-- Basic joystick teleop enabled base -->
+  <include
+   file="$(arg root)/m_$(arg jst)/launch/m_$(arg jst).launch" >
+    <arg name="robot_base" value="$(arg robot_base)" />
+  </include>
+
+  <!-- Camera -->
+  <include
+   file="$(arg root)/n_$(arg cam)/launch/n_$(arg cam).launch" >
+    <arg name="robot_base" value="$(arg robot_base)"/>
+    <arg name="width" value="1280" />
+    <arg name="height" value="960" />
+  </include>
+
+  <!-- map node -->
+  <include
+   file="$(arg root)/n_$(arg ms)/launch/n_$(arg ms).launch.xml" />
+
+  <!-- Fiducial detection -->
+  <include
+   file="$(arg root)/n_$(arg fd)/launch/n_$(arg fd).launch.xml">
+    <arg name="camera" value="/camera"/>
+    <arg name="image" value="image_raw"/>
+    <!-- default fiducal_len = 0.145 mjWall 0.09  mjGar 0.135 wayne .200 -->
+    <arg name="fiducial_len" value="0.200"/>
+    <arg name="undistort_points" value="true"/>
+  </include>
+
+  <!-- Fiducial slam -->
+  <include
+   file="$(arg root)/n_$(arg fs)/launch/n_$(arg fs).launch.xml">
+    <arg name="mapping_mode" value="$(arg mapping_mode)"/>
+    <arg name="camera_frame" value="camera_pose"/>
+    <arg name="map_frame" value="map"/>
+    <arg name="odom_frame" value="odom"/>
+    <arg name="pose_frame" value="base_link"/>
+  </include>
+
+  <!-- move_base node -->
+  <include
+   file="$(arg root)/n_$(arg mb)/launch/n_$(arg mb).launch.xml" />
+
+</launch>

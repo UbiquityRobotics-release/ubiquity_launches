@@ -1,0 +1,25 @@
+<launch>
+  <!--Summary: Start nodes needed to support the Raspberry Pi camera. -->
+  <!--Overview: The launch file for this directory starts the
+  Raspberry Pi camera node and a node that uncompress the output that
+  comes out of the Raspberry Pi GPU (Graphical Processing Unit.) -->
+
+  <!-- Required arguments: -->
+  <arg name="robot_base" />
+    <!--robot_base: The robot base to use (e.g. "magni", "loki", etc.) -->
+
+  <!-- Convenience arguments: -->
+  <arg name="root" value="$(find ubiquity_launches)" />
+  <arg name="node" value="raspicam" />
+
+  <!-- Start n_raspicam node: -->
+  <include file="$(arg root)/n_$(arg node)/launch/n_$(arg node).launch">
+    <arg name="robot_base" value="$(arg robot_base)" />
+  </include>
+  
+  <!-- Start n_image_uncompress node: -->
+  <include file="$(arg root)/n_image_uncompress/launch/n_image_uncompress.launch.xml">
+     <arg name="camera_name" value="$(arg node)/camera" />
+  </include>
+
+</launch>
