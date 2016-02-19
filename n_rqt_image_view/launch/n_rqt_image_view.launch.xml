@@ -1,0 +1,28 @@
+<launch>
+  <!--Summary: Run `rqt_image_view` to view camera output on a screen. -->
+  <!--Overview: This runs the `rqt_image_view` node to view a camera
+      output stream. -->
+
+  <!-- Required arguments: -->
+  <arg name="image" />
+    <!--image: The topic to view for the image stream. -->
+  <arg name="robot_platform" />
+  <arg name="machine_name" default="viewer"/>
+  <arg name="machine_host" />
+  <arg name="machine_user" />
+
+  <!-- Convenience arguments: -->
+  <arg name="root" value="$(find ubiquity_launches)" />
+  <arg name="node" value="rqt_image_view" />
+
+  <machine name="$(arg machine_name)"
+    address="$(arg machine_host)" user="$(arg machine_user)"
+    env-loader="/tmp/env_loader.sh" />
+
+  <!-- Start `rqt_image_view` node: -->
+  <node name="n_$(arg node)" machine="$(arg machine_name)"
+   pkg="rqt_image_view" type="rqt_image_view"
+   output="screen">
+    <param name="image" value="$(arg image)" />
+  </node>
+</launch>
