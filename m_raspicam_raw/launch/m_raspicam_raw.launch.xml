@@ -5,21 +5,32 @@
   comes out of the Raspberry Pi GPU (Graphical Processing Unit.) -->
 
   <!-- Required arguments: -->
-  <arg name="robot_base" />
-    <!--robot_base: The robot base to use (e.g. "magni", "loki", etc.) -->
+  <arg name="robot_platform" />
+  <arg name="robot_host" />
+  <arg name="robot_user" />
+  <arg name="viewer_host" default="localhost"/>
+  <arg name="viewer_user" default=""/>
 
   <!-- Convenience arguments: -->
   <arg name="root" value="$(find ubiquity_launches)" />
   <arg name="node" value="raspicam" />
 
   <!-- Start n_raspicam node: -->
-  <include file="$(arg root)/n_$(arg node)/launch/n_$(arg node).launch">
-    <arg name="robot_base" value="$(arg robot_base)" />
+  <include file="$(arg root)/n_$(arg node)/launch/n_$(arg node).launch.xml">
+    <arg name="robot_platform" value="$(arg robot_platform)" />
+    <arg name="machine_name" value="robot"/>
+    <arg name="machine_host" value="$(arg robot_host)"/>
+    <arg name="machine_user" value="$(arg robot_user)"/>
   </include>
   
   <!-- Start n_image_uncompress node: -->
-  <include file="$(arg root)/n_image_uncompress/launch/n_image_uncompress.launch.xml">
-     <arg name="camera_name" value="$(arg node)/camera" />
+  <include file="$(arg root)/n_image_uncompress/launch/n_image_uncompress1.launch.xml">
+    <arg name="robot_platform" value="$(arg robot_platform)" />
+    <arg name="machine_name" value="robot"/>
+    <arg name="machine_host" value="$(arg robot_host)"/>
+    <arg name="machine_user" value="$(arg robot_user)"/>
+
+    <arg name="camera_name" value="$(arg node)/camera" />
   </include>
 
 </launch>
